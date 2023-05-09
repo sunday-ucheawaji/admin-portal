@@ -12,15 +12,35 @@ import "./assets/css/index.css";
 import Layout from "./components/layout/Layout";
 
 // const store = createStore(rootReducer);
-import store from "./redux/store";
+// import store from "./redux/store";
+
+import store, { persistor } from "./redux/store";
+
+import { PersistGate } from "redux-persist/integration/react";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnmount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
 
 document.title = "Monirates";
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <Layout />
-    </React.StrictMode>
+    {/* <PersistGate loading={null} persistor={persistor}> */}
+    <QueryClientProvider client={queryClient}>
+      <React.StrictMode>
+        <Layout />
+      </React.StrictMode>
+    </QueryClientProvider>
+    {/* </PersistGate> */}
   </Provider>,
   document.getElementById("root")
 );
