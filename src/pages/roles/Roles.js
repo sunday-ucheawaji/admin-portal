@@ -1,15 +1,16 @@
 import React from "react";
-import Table from "../../components/table/Table";
-import useAdmin from "./useAdmin";
 
-const Admin = () => {
+import Table from "../../components/table/Table";
+import useRoles from "./useRoles";
+
+const Roles = () => {
   const {
-    adminList,
+    rolesList,
     error,
     isLoading,
     isFetching,
 
-    adminTableHead,
+    roleTableHead,
     dataShow,
     limit,
     setDataShow,
@@ -17,20 +18,20 @@ const Admin = () => {
     renderBody,
     renderHead,
     refetch,
-  } = useAdmin();
+  } = useRoles();
 
   return (
     <div>
-      <h2 className="page-header">Admins</h2>
+      <h2 className="page-header">Roles</h2>
       <div className="row">
         <div className="col-12">
           <div className="card">
             <div className="card__body">
               <Table
                 limit={limit}
-                headData={adminTableHead}
+                headData={roleTableHead}
                 renderHead={(item, index) => renderHead(item, index)}
-                bodyData={adminList}
+                bodyData={rolesList}
                 renderBody={(item, index) => renderBody(item, index)}
                 dataShow={dataShow}
                 setDataShow={setDataShow}
@@ -43,4 +44,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default Roles;

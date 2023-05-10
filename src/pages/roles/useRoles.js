@@ -1,26 +1,11 @@
 import React, { useState, useEffect } from "react";
+import Moment from "react-moment";
 import apiClient from "../../http/http-common";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router";
-import Badge from "../../components/badge/Badge";
 
-function useAdmin() {
-  const adminTableHead = [
-    "",
-    "Email",
-    "Full Name",
-    // "Role ID",
-    "Role",
-    "Status",
-    // "Last Login",
-  ];
-
-  const orderStatus = {
-    shipping: "primary",
-    pending: "warning",
-    ACTIVE: "success",
-    refund: "danger",
-  };
+function useRole() {
+  const roleTableHead = ["", "Name", "Created At", "Updated At"];
 
   const renderHead = (item, index) => <th key={index}>{item}</th>;
 
@@ -31,15 +16,14 @@ function useAdmin() {
       key={index}
     >
       <td>{index + 1}</td>
-      <td>{item.email}</td>
-      <td>{item.fullName}</td>
-      {/* <td>{item?.roleId}</td> */}
-      <td>{item?.roleName}</td>
-
+      <td>{item.name}</td>
       <td>
-        <Badge type={orderStatus[item.status]} content={item.status} />
+        <Moment format="DD-MM-YYYY hh:mm a">{item.createdAt}</Moment>
       </td>
-      {/* <td>{item.lastLoginAt}</td> */}
+      {/* <td>{item?.roleId}</td> */}
+      <td>
+        <Moment format="DD-MM-YYYY hh:mm a">{item.updatedAt}</Moment>
+      </td>
     </tr>
   );
 
@@ -49,30 +33,23 @@ function useAdmin() {
 
   const { data, error, isLoading, isFetching, refetch } = useQuery(
     "admin",
-    async () => await apiClient.get("/admins")
+    async () => await apiClient.get("/roles")
   );
+
+  const rolesList = data?.data?.data;
 
   useEffect(() => {
     refetch();
   }, []);
 
-  const adminList = data?.data?.data?.users;
-
   useEffect(() => {
     const initDataShow =
-      limit && adminList ? adminList.slice(0, Number(limit)) : adminList;
+      limit && Array.isArray(rolesList)
+        ? rolesList?.slice(0, Number(limit))
+        : rolesList;
 
-    const listOfAdmins = initDataShow?.map((admin) => {
-      return {
-        id: admin?.id,
-        ...admin,
-        roleId: admin?.roleId?._id,
-        roleName: admin?.roleId?.name,
-      };
-    });
-
-    setDataShow(listOfAdmins || []);
-  }, [limit, adminList]);
+    setDataShow(initDataShow || []);
+  }, [limit, rolesList]);
 
   if (error?.response?.data?.message === "User session expired") {
     localStorage.clear();
@@ -82,12 +59,12 @@ function useAdmin() {
 
   const history = useHistory();
   return {
-    adminList,
+    rolesList,
     error,
     isLoading,
     isFetching,
 
-    adminTableHead,
+    roleTableHead,
     dataShow,
     limit,
     setDataShow,
@@ -98,4 +75,4 @@ function useAdmin() {
   };
 }
 
-export default useAdmin;
+export default useRole;

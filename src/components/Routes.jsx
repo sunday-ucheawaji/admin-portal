@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 const Customers = React.lazy(() => import("../pages/Customers"));
 const Admin = React.lazy(() => import("../pages/admin/Admin"));
+const Roles = React.lazy(() => import("../pages/roles/Roles"));
 
 const loading = (
   <div className="pt-3 text-center">
@@ -17,6 +18,7 @@ const Routes = () => {
       <Route path="/" exact component={Dashboard} />
       <Route path="/customers" component={Customers} />
       <Route path="/admins" component={Admin} />
+      <Route path="/roles" component={Roles} />
     </Switch>
   );
 };

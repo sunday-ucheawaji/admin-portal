@@ -3,50 +3,8 @@ import React, { useState, useEffect } from "react";
 import "./table.css";
 
 const Table = (props) => {
-  //   const initDataShow =
-  //     props.limit && props.bodyData
-  //       ? props?.bodyData?.slice(0, Number(props?.limit))
-  //       : props?.bodyData;
-
-  const [dataShow, setDataShow] = useState([]);
-
   let pages = 1;
-
   let range = [];
-
-  console.log("props", props.bodyData);
-  console.log(props.limit);
-
-  //   useEffect(() => {
-  //     setDataShow([...initDataShow]);
-  //   }, []);
-
-  useEffect(() => {
-    const initDataShow =
-      props.limit && props.bodyData
-        ? props.bodyData.slice(0, Number(props.limit))
-        : props.bodyData;
-
-    const listOfAdmins = initDataShow?.map((admin) => {
-      return {
-        id: admin?.id,
-        ...admin,
-        roleId: admin?.roleId?._id,
-        roleName: admin?.roleId?.name,
-      };
-    });
-
-    setDataShow(listOfAdmins || []);
-  }, [props.limit, props.bodyData]);
-
-  console.log("dataShow", dataShow);
-
-  //   if (props.limit !== undefined) {
-  //     let page = Math?.floor(props?.bodyData?.length / Number(props?.limit));
-  //     pages =
-  //       props?.bodyData?.length % Number(props?.limit) === 0 ? page : page + 1;
-  //     range = [...Array(pages)?.keys()];
-  //   }
 
   if (
     props.limit !== undefined &&
@@ -64,7 +22,7 @@ const Table = (props) => {
     const start = Number(props.limit) * page;
     const end = start + Number(props.limit);
 
-    setDataShow(props.bodyData.slice(start, end));
+    props.setDataShow(props.bodyData.slice(start, end));
 
     setCurrPage(page);
   };
@@ -82,9 +40,12 @@ const Table = (props) => {
               </tr>
             </thead>
           ) : null}
-          {props?.bodyData && props?.renderBody ? (
+
+          {Array.isArray(props.dataShow) && props?.renderBody ? (
             <tbody>
-              {dataShow?.map((item, index) => props?.renderBody(item, index))}
+              {props?.dataShow?.map((item, index) =>
+                props?.renderBody(item, index)
+              )}
             </tbody>
           ) : null}
         </table>
