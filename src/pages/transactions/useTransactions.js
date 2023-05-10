@@ -4,21 +4,22 @@ import { useQuery } from "react-query";
 import { useHistory } from "react-router";
 import Badge from "../../components/badge/Badge";
 
-function useAdmin() {
-  const adminTableHead = [
+function useTransactions() {
+  const transactionsTableHead = [
     "",
-    "Email",
-    "Full Name",
-    // "Role ID",
-    "Role",
+    "Amount",
+    "Currency",
+    "Payment Gateway",
+    "Payment Gateway Ref",
+    "Payment Method",
+    "Purpose",
     "Status",
-    // "Last Login",
   ];
 
-  const adminStatus = {
+  const transactionStatus = {
     shipping: "primary",
     pending: "warning",
-    ACTIVE: "success",
+    SUCCESSFUL: "success",
     refund: "danger",
   };
 
@@ -31,15 +32,16 @@ function useAdmin() {
       key={index}
     >
       <td>{index + 1}</td>
-      <td>{item.email}</td>
-      <td>{item.fullName}</td>
-      {/* <td>{item?.roleId}</td> */}
-      <td>{item?.roleName}</td>
+      <td>{item.amount}</td>
+      <td>{item.currency}</td>
+      <td>{item.paymentGateway}</td>
+      <td>{item.paymentGatewayReference}</td>
+      <td>{item.paymentMethod}</td>
+      <td>{item.purpose}</td>
 
       <td>
-        <Badge type={adminStatus[item.status]} content={item.status} />
+        <Badge type={transactionStatus[item.status]} content={item.status} />
       </td>
-      {/* <td>{item.lastLoginAt}</td> */}
     </tr>
   );
 
@@ -48,31 +50,24 @@ function useAdmin() {
   const [dataShow, setDataShow] = useState([]);
 
   const { data, error, isLoading, isFetching, refetch } = useQuery(
-    "admin",
-    async () => await apiClient.get("/admins")
+    "transactions",
+    async () => await apiClient.get("/transactions")
   );
+
+  const transactionList = data?.data?.data?.transactions;
 
   useEffect(() => {
     refetch();
   }, []);
 
-  const adminList = data?.data?.data?.users;
-
   useEffect(() => {
     const initDataShow =
-      limit && adminList ? adminList.slice(0, Number(limit)) : adminList;
+      limit && Array.isArray(transactionList)
+        ? transactionList?.slice(0, Number(limit))
+        : transactionList;
 
-    const listOfAdmins = initDataShow?.map((admin) => {
-      return {
-        id: admin?.id,
-        ...admin,
-        roleId: admin?.roleId?._id,
-        roleName: admin?.roleId?.name,
-      };
-    });
-
-    setDataShow(listOfAdmins || []);
-  }, [limit, adminList]);
+    setDataShow(initDataShow || []);
+  }, [limit, transactionList]);
 
   if (error?.response?.data?.message === "User session expired") {
     localStorage.clear();
@@ -80,14 +75,16 @@ function useAdmin() {
     window.location.href = "/login";
   }
 
+  console.log(transactionList);
+
   const history = useHistory();
   return {
-    adminList,
+    transactionList,
     error,
     isLoading,
     isFetching,
 
-    adminTableHead,
+    transactionsTableHead,
     dataShow,
     limit,
     setDataShow,
@@ -98,4 +95,4 @@ function useAdmin() {
   };
 }
 
-export default useAdmin;
+export default useTransactions;

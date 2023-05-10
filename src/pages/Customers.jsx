@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Table from "../components/table/Table";
 
@@ -29,6 +29,16 @@ const renderBody = (item, index) => (
 );
 
 const Customers = () => {
+  const limit = "10";
+  const [dataShow, setDataShow] = useState([]);
+  useEffect(() => {
+    const initDataShow =
+      limit && customerList
+        ? customerList.slice(0, Number(limit))
+        : customerList;
+
+    setDataShow(initDataShow || []);
+  }, [limit, customerList]);
   return (
     <div>
       <h2 className="page-header">customers</h2>
@@ -37,11 +47,13 @@ const Customers = () => {
           <div className="card">
             <div className="card__body">
               <Table
-                limit="10"
+                limit={limit}
                 headData={customerTableHead}
                 renderHead={(item, index) => renderHead(item, index)}
                 bodyData={customerList}
                 renderBody={(item, index) => renderBody(item, index)}
+                dataShow={dataShow}
+                setDataShow={setDataShow}
               />
             </div>
           </div>
