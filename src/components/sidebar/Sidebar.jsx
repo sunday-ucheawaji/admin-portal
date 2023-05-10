@@ -22,8 +22,6 @@ const SidebarItem = (props) => {
 };
 
 const Sidebar = (props) => {
-  const [sideBarIsClicked, setSideBarIsClicked] = useState(false);
-
   const activeItem = sidebar_items.findIndex(
     (item) => item.route === props.location.pathname
   );

@@ -16,6 +16,7 @@ const Subscribers = React.lazy(() =>
 );
 
 const Users = React.lazy(() => import("../pages/users/Users"));
+const Trades = React.lazy(() => import("../pages/trades/Trades"));
 
 const loading = (
   <div className="pt-3 text-center">
@@ -34,6 +35,7 @@ const Routes = () => {
       <Route path="/transactions" component={Transactions} />
       <Route path="/subscribers" component={Subscribers} />
       <Route path="/users" component={Users} />
+      <Route path="/trades" component={Trades} />
     </Switch>
   );
 };

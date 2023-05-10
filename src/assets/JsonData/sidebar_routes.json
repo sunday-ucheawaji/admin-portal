@@ -30,6 +30,11 @@
     "icon": "bx bx-wallet"
   },
   {
+    "display_name": "Trades",
+    "route": "/trades",
+    "icon": "bx bx-transfer-alt"
+  },
+  {
     "display_name": "Subscribers",
     "route": "/subscribers",
     "icon": "bx bx-group"
