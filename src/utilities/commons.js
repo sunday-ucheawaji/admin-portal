@@ -86,3 +86,9 @@ export const uniqueFieldValues = (inputArray, field) => {
 
   return result
 }
+
+export const handleLogout = () => {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.href = "/login";
+};

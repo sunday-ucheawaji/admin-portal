@@ -7,6 +7,7 @@ import "./sidebar.css";
 import logo from "../../assets/images/logo.svg";
 
 import sidebar_items from "../../assets/JsonData/sidebar_routes.json";
+import { handleLogout } from "../../utilities/commons";
 
 const SidebarItem = (props) => {
   const active = props.active ? "active" : "";
@@ -40,6 +41,16 @@ const Sidebar = (props) => {
           />
         </Link>
       ))}
+
+      <div onClick={handleLogout}>
+        <Link to={"/login"}>
+          <SidebarItem
+            title={"Logout"}
+            icon={"bx bx-log-out"}
+            //   active={index === activeItem}
+          />
+        </Link>
+      </div>
     </div>
   );
 };
